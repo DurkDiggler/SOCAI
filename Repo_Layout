@@ -1,0 +1,38 @@
+soc-agent/
+├─ pyproject.toml
+├─ README.md
+├─ Dockerfile
+├─ docker-compose.yml
+├─ Makefile
+├─ .env.example
+├─ .gitignore
+├─ .pre-commit-config.yaml
+├─ .github/
+│  └─ workflows/
+│     └─ ci.yml
+├─ scripts/
+│  └─ gen_schema.py
+├─ src/
+│  └─ soc_agent/
+│     ├─ __init__.py
+│     ├─ logging.py
+│     ├─ security.py
+│     ├─ models.py
+│     ├─ config.py
+│     ├─ analyzer.py
+│     ├─ notifiers.py
+│     ├─ autotask.py
+│     ├─ webapp.py
+│     └─ intel/
+│        ├─ __init__.py
+│        ├─ client.py
+│        └─ providers/
+│           ├─ otx.py
+│           ├─ virustotal.py
+│           └─ abuseipdb.py
+└─ tests/
+   ├─ conftest.py
+   ├─ test_models.py
+   ├─ test_analyzer.py
+   ├─ test_intel.py
+   └─ test_webhook.py
