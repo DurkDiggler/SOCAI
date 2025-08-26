@@ -16,7 +16,8 @@ def normalize_wazuh_event(event: Dict[str, Any]) -> Dict[str, Any]:
     if not ip:
         # Fallback to parsing the IP from the full log line
         full_log = event.get("full_log", "")
-        match = re.search(r"from ([0-9.]+)", full_log)
+        # capture IPv4 or IPv6 addresses from the log line
+        match = re.search(r"from ([0-9a-fA-F:.]+)", full_log)
         if match:
             ip = match.group(1)
 

@@ -16,6 +16,14 @@ CS = {
     "Name": "Authentication failed",
 }
 
+
+def test_normalize_wazuh_ipv6():
+    ipv6_event = dict(WAZUH)
+    ipv6_event["data"] = {"srcuser": "bob"}
+    ipv6_event["full_log"] = "Failed password from 2001:db8::5 port 22 ssh2"
+    out = normalize_event(ipv6_event)
+    assert out["ip"] == "2001:db8::5"
+
 def test_normalize_wazuh():
     out = normalize_event(WAZUH)
     assert out["event_type"] == "auth_failed"
