@@ -9,13 +9,14 @@ from .autotask import create_autotask_ticket
 from .notifiers import send_email
 from .security import WebhookAuth
 from .logging import setup_json_logging
+from .adapters import normalize_event
 
-app = FastAPI(title="SOC Agent – Webhook Analyzer", version="1.1.0")
+app = FastAPI(title="SOC Agent – Webhook Analyzer", version="1.2.0")
 setup_json_logging()
 
 @app.get("/")
 def root():
-    return {"ok": True, "service": "SOC Agent – Webhook Analyzer", "version": "1.1.0"}
+    return {"ok": True, "service": "SOC Agent – Webhook Analyzer", "version": "1.2.0"}
 
 @app.get("/healthz")
 def healthz():
@@ -28,6 +29,7 @@ def readyz():
 @app.post("/webhook")
 async def webhook(req: Request):
     body = await req.body()
+
     # Optional shared-secret or HMAC verification
     if SETTINGS.webhook_shared_secret:
         provided = req.headers.get("X-Webhook-Secret")
@@ -43,9 +45,12 @@ async def webhook(req: Request):
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid JSON")
 
-    # Validate/normalize
+    # Normalize vendor payloads first
+    normalized = normalize_event(event)
+
+    # Validate normalized payload
     try:
-        payload = EventIn.model_validate(event)
+        payload = EventIn.model_validate(normalized)
     except Exception as e:
         raise HTTPException(status_code=422, detail=f"Invalid payload: {e}")
 
