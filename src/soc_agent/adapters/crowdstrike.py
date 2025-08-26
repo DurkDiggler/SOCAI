@@ -1,20 +1,23 @@
-from typing import Dict, Any
+from typing import Any, Dict
+
 
 def normalize_crowdstrike_event(event: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Convert a CrowdStrike Falcon event into EventIn‑compatible dict.
-    """
-    meta = event.get("metadata", {})
-    event_type = meta.get("eventType", "unknown")
-    sev = int(event.get("Severity", 0)) if "Severity" in event else 0
+    """Convert a CrowdStrike event into an EventIn‑compatible dict."""
+
+    etype = event.get("eventType") or event.get("Name") or ""
+    etype_lower = etype.lower()
+    if "auth" in etype_lower and "fail" in etype_lower:
+        event_type = "auth_failed"
+    else:
+        event_type = etype_lower or "unknown"
 
     return {
         "source": "crowdstrike",
-        "event_type": event_type.lower(),
-        "severity": sev,
-        "timestamp": meta.get("eventCreationTime"),
-        "message": event.get("event_simpleName"),
-        "ip": event.get("ComputerIP"),
+        "event_type": event_type,
+        "severity": int(event.get("Severity", 0)),
+        "timestamp": event.get("@timestamp"),
+        "message": event.get("Name"),
+        "ip": event.get("LocalIP"),
         "username": event.get("UserName"),
         "raw": event,
     }

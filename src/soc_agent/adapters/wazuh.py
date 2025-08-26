@@ -1,20 +1,24 @@
-from typing import Dict, Any
+from typing import Any, Dict
+
 
 def normalize_wazuh_event(event: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Convert a Wazuh alert JSON into EventIn‑compatible dict.
-    """
+    """Convert a Wazuh alert JSON into an EventIn‑compatible dict."""
+
     rule = event.get("rule", {})
-    agent = event.get("agent", {})
-    srcip = event.get("srcip")
+    data = event.get("data", {})
+    desc = (rule.get("description") or "").lower()
+    if "authentication failed" in desc:
+        event_type = "auth_failed"
+    else:
+        event_type = desc or "unknown"
 
     return {
         "source": "wazuh",
-        "event_type": rule.get("id", "unknown"),
+        "event_type": event_type,
         "severity": int(rule.get("level", 0)),
         "timestamp": event.get("@timestamp"),
-        "message": rule.get("description"),
-        "ip": srcip,
-        "username": agent.get("name"),
+        "message": event.get("full_log") or rule.get("description"),
+        "ip": data.get("srcip"),
+        "username": data.get("srcuser"),
         "raw": event,
     }
