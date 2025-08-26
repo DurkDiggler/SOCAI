@@ -17,3 +17,11 @@ uvicorn soc_agent.webapp:app --host 0.0.0.0 --port 8000
 
 # test
 pytest -q --cov soc_agent --cov-report=term-missing
+
+### Vendor Adapters (Wazuh & CrowdStrike)
+The service auto-detects and normalizes common vendor payloads to the internal `EventIn` schema before scoring.
+
+- **Wazuh** → severity from `rule.level`; event type inferred from `rule.description`; IP from `data.srcip` or `full_log`; username from `data.srcuser`.
+- **CrowdStrike** → event type from `eventType`/`Name`; severity from `Severity`; IP from `LocalIP`/`RemoteIP`; username from `UserName`.
+
+If you already POST in the normalized schema, adapters are skipped automatically.
