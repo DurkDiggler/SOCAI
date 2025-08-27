@@ -1,13 +1,13 @@
 .PHONY: setup run test fmt build up down schema
 
 setup:
-	python -m venv .venv && . .venv/bin/activate && pip install -e .[dev] && pre-commit install
+	pip install -r requirements.txt && pre-commit install
 
 run:
-	uvicorn soc_agent.webapp:app --host $${APP_HOST:-0.0.0.0} --port $${APP_PORT:-8000}
+	docker compose up --build
 
 test:
-	pytest -q --cov soc_agent --cov-report=term-missing
+	docker compose run --rm app pytest -q --cov soc_agent --cov-report=term-missing
 
 fmt:
 	ruff check --fix && ruff format
@@ -16,10 +16,10 @@ build:
 	docker build -t soc-agent:latest .
 
 up:
-	docker-compose up -d --build
+	docker compose up -d --build
 
 down:
-	docker-compose down
+	docker compose down
 
 schema:
 	python scripts/gen_schema.py > schema.json

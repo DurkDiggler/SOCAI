@@ -4,19 +4,22 @@ FastAPI webhook that ingests security events, enriches IOCs (OTX / VirusTotal / 
 
 ## 1) Getting Started
 ```bash
-# clone & setup
-python -m venv .venv && source .venv/bin/activate
-pip install -e .[dev]
-pre-commit install
-
-# configure
+# configure environment
 cp .env.example .env  # edit as needed
 
-# run
-uvicorn soc_agent.webapp:app --host 0.0.0.0 --port 8000
+# build & run with docker-compose
+docker compose up --build
+# or
+make up
 
-# test
-pytest -q --cov soc_agent --cov-report=term-missing
+# run tests inside the container
+docker compose run --rm app pytest -q --cov soc_agent --cov-report=term-missing
+
+# stop services
+docker compose down
+# or
+make down
+```
 
 ### Vendor Adapters (Wazuh & CrowdStrike)
 The service auto-detects and normalizes common vendor payloads to the internal `EventIn` schema before scoring.
