@@ -1,11 +1,18 @@
 from fastapi.testclient import TestClient
+
 from soc_agent.webapp import app
 
 client = TestClient(app)
 
 def test_webhook_ok(monkeypatch):
-    monkeypatch.setattr("soc_agent.webapp.create_autotask_ticket", lambda **kw: (True, "created", {"id": 1}))
-    monkeypatch.setattr("soc_agent.webapp.send_email", lambda **kw: (True, "sent"))
+    monkeypatch.setattr(
+        "soc_agent.webapp.create_autotask_ticket",
+        lambda **kw: (True, "created", {"id": 1}),
+    )
+    monkeypatch.setattr(
+        "soc_agent.webapp.send_email",
+        lambda **kw: (True, "sent"),
+    )
 
     payload = {
         "source": "wazuh",
