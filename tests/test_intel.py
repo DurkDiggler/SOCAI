@@ -1,5 +1,6 @@
 from soc_agent.intel.client import IntelClient
 
+
 class DummySession:
     def __init__(self, payload):
         self.payload = payload
@@ -17,7 +18,12 @@ class DummySession:
 class StubClient(IntelClient):
     def __init__(self):
         super().__init__()
-        self.session = DummySession({"pulse_info": {"pulses": [1]}, "data": {"attributes": {"last_analysis_stats": {}}}})
+        self.session = DummySession(
+            {
+                "pulse_info": {"pulses": [1]},
+                "data": {"attributes": {"last_analysis_stats": {}}},
+            }
+        )
 
 
 def test_enrich_ip_shape():

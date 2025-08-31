@@ -1,9 +1,15 @@
-from soc_agent.analyzer import base_score, extract_iocs, enrich_and_score
-from soc_agent.intel import client as _client_mod
+from soc_agent.analyzer import base_score, enrich_and_score
+
 
 class DummyIntel:
     def enrich_ip(self, ip: str):
-        return {"indicator": ip, "score": 80 if ip == "9.9.9.9" else 0, "labels": ["unknown"], "sources": {}}
+        return {
+            "indicator": ip,
+            "score": 80 if ip == "9.9.9.9" else 0,
+            "labels": ["unknown"],
+            "sources": {},
+        }
+
 
 def test_extract_and_score(monkeypatch):
     monkeypatch.setattr("soc_agent.analyzer.intel_client", DummyIntel())

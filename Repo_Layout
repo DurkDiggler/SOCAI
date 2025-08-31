@@ -4,8 +4,8 @@ soc-agent/
 ├─ Dockerfile
 ├─ docker-compose.yml
 ├─ Makefile
+├─ requirements.txt
 ├─ .env.example
-├─ .gitignore
 ├─ .pre-commit-config.yaml
 ├─ .github/
 │  └─ workflows/
@@ -15,24 +15,29 @@ soc-agent/
 ├─ src/
 │  └─ soc_agent/
 │     ├─ __init__.py
-│     ├─ logging.py
-│     ├─ security.py
-│     ├─ models.py
-│     ├─ config.py
+│     ├─ adapters/
+│     │  ├─ __init__.py
+│     │  ├─ crowdstrike.py
+│     │  └─ wazuh.py
 │     ├─ analyzer.py
-│     ├─ notifiers.py
 │     ├─ autotask.py
-│     ├─ webapp.py
-│     └─ intel/
-│        ├─ __init__.py
-│        ├─ client.py
-│        └─ providers/
-│           ├─ otx.py
-│           ├─ virustotal.py
-│           └─ abuseipdb.py
+│     ├─ config.py
+│     ├─ intel/
+│     │  ├─ __init__.py
+│     │  ├─ client.py
+│     │  └─ providers/
+│     │     ├─ abuseipdb.py
+│     │     ├─ otx.py
+│     │     └─ virustotal.py
+│     ├─ logging.py
+│     ├─ models.py
+│     ├─ notifiers.py
+│     ├─ security.py
+│     └─ webapp.py
 └─ tests/
    ├─ conftest.py
-   ├─ test_models.py
+   ├─ test_adapters.py
    ├─ test_analyzer.py
    ├─ test_intel.py
+   ├─ test_models.py
    └─ test_webhook.py
