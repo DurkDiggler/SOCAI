@@ -1,6 +1,8 @@
 from __future__ import annotations
-import logging
+
 import json
+import logging
+
 
 class JsonFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:

@@ -1,6 +1,9 @@
 from __future__ import annotations
-from pydantic import BaseModel, Field
+
 from typing import Any, Dict, Optional
+
+from pydantic import BaseModel, Field
+
 
 class EventIn(BaseModel):
     source: Optional[str] = None
