@@ -1,7 +1,7 @@
 """Vendor specific payload normalization utilities."""
 
-from .wazuh import normalize_wazuh_event
 from .crowdstrike import normalize_crowdstrike_event
+from .wazuh import normalize_wazuh_event
 
 
 def normalize_event(event):

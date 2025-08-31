@@ -1,8 +1,11 @@
 from __future__ import annotations
+
 import smtplib
 from email.message import EmailMessage
 from typing import Tuple
+
 from .config import SETTINGS
+
 
 def send_email(subject: str, body: str, subtype: str = "plain") -> Tuple[bool, str]:
     if not SETTINGS.enable_email:

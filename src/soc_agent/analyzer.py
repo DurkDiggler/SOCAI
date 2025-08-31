@@ -1,8 +1,11 @@
 from __future__ import annotations
-import re, socket
+
+import re
+import socket
 from typing import Any, Dict, List
-from .intel import intel_client
+
 from .config import SETTINGS
+from .intel import intel_client
 
 RULE_WEIGHTS = {
     "auth_failed": 15,

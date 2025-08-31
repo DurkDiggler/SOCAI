@@ -1,13 +1,28 @@
 from __future__ import annotations
+
 import json
 from typing import Any, Optional, Tuple
+
 import requests
+
 from .config import SETTINGS
 
-def create_autotask_ticket(title: str, description: str, priority: Optional[int] = None) -> Tuple[bool, str, Optional[Any]]:
+
+def create_autotask_ticket(
+    title: str,
+    description: str,
+    priority: Optional[int] = None,
+) -> Tuple[bool, str, Optional[Any]]:
     if not SETTINGS.enable_autotask:
         return False, "Autotask disabled", None
-    for needed in (SETTINGS.at_base_url, SETTINGS.at_api_integration_code, SETTINGS.at_username, SETTINGS.at_secret, SETTINGS.at_account_id, SETTINGS.at_queue_id):
+    for needed in (
+        SETTINGS.at_base_url,
+        SETTINGS.at_api_integration_code,
+        SETTINGS.at_username,
+        SETTINGS.at_secret,
+        SETTINGS.at_account_id,
+        SETTINGS.at_queue_id,
+    ):
         if not needed:
             return False, "Autotask not fully configured", None
 
@@ -27,7 +42,12 @@ def create_autotask_ticket(title: str, description: str, priority: Optional[int]
         "priority": int(priority or SETTINGS.at_ticket_priority),
     }
     try:
-        r = requests.post(url, headers=headers, data=json.dumps(payload), timeout=SETTINGS.http_timeout)
+        r = requests.post(
+            url,
+            headers=headers,
+            data=json.dumps(payload),
+            timeout=SETTINGS.http_timeout,
+        )
         if r.status_code >= 400:
             return False, f"HTTP {r.status_code}: {r.text}", None
         return True, "created", r.json()
