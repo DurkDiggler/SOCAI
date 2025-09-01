@@ -31,16 +31,22 @@ FastAPI webhook that ingests security events, enriches IOCs (OTX / VirusTotal / 
 5. **Run tests (requires development dependencies)**
 
    The runtime Docker image only includes production packages. To execute the
-   test suite you need a Python environment with the development dependencies
-   installed. This can be a dedicated development image or your local host.
+   test suite you need a Python environment with the development extras. Install
+   them on the host or use the `dev` Docker build target.
 
    On the host:
 
    ```bash
-   pip install -r requirements.txt
+   pip install -e .[dev]
    PYTHONPATH=src pytest -q --cov soc_agent --cov-report=term-missing
    # or
    make test
+   ```
+
+   In Docker:
+
+   ```bash
+   make test docker=1
    ```
 
 6. **Stop services**
