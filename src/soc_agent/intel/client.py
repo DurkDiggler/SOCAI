@@ -1,10 +1,13 @@
 from __future__ import annotations
-import requests
+
 from typing import Any, Dict, List
+
+import requests
+
 from ..config import SETTINGS
 from ..logging import setup_json_logging
-from .. import logging as _logging  # ensure formatter is registered
-from .providers import otx, virustotal, abuseipdb
+from .providers import abuseipdb, otx, virustotal
+
 
 class IntelClient:
     def __init__(self):
@@ -56,5 +59,6 @@ class IntelClient:
         else:
             results["labels"].append("unknown")
         return results
+
 
 intel_client = IntelClient()

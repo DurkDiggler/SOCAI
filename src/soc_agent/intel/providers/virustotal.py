@@ -1,7 +1,11 @@
 from __future__ import annotations
-import requests
+
 from typing import Any, Dict
+
+import requests
+
 from ...config import SETTINGS
+
 
 def lookup_ip(session: requests.Session, ip: str, timeout: float) -> Dict[str, Any]:
     url = f"https://www.virustotal.com/api/v3/ip_addresses/{ip}"
