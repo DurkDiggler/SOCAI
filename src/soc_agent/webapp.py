@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import json
 
+from importlib import metadata
+
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 
@@ -14,13 +16,18 @@ from .models import EventIn
 from .notifiers import send_email
 from .security import WebhookAuth
 
-app = FastAPI(title="SOC Agent – Webhook Analyzer", version="1.2.0")
+try:
+    VERSION = metadata.version("soc_agent")
+except metadata.PackageNotFoundError:  # pragma: no cover - fallback for non-installed package
+    VERSION = "0.0.0"
+
+app = FastAPI(title="SOC Agent – Webhook Analyzer", version=VERSION)
 setup_json_logging()
 
 
 @app.get("/")
 def root():
-    return {"ok": True, "service": "SOC Agent – Webhook Analyzer", "version": "1.2.0"}
+    return {"ok": True, "service": "SOC Agent – Webhook Analyzer", "version": VERSION}
 
 
 @app.get("/healthz")
