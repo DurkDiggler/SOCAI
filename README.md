@@ -39,6 +39,44 @@ FastAPI webhook that ingests security events, enriches IOCs (OTX / VirusTotal / 
    make down
    ```
 
+### TLS (Optional)
+
+To serve the API over HTTPS, provide a certificate and key and pass them to
+`uvicorn` or terminate TLS with a reverse proxy such as Nginx or Traefik.
+
+1. **Create or mount cert/key pair**
+   ```bash
+   mkdir -p certs
+   openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+     -keyout certs/tls.key -out certs/tls.crt -subj "/CN=localhost"
+   ```
+
+2. **Run with TLS**
+   ```bash
+   docker compose up --build -d
+   docker compose exec app uvicorn soc_agent.main:app \
+     --host 0.0.0.0 --port 8443 \
+     --ssl-keyfile /certs/tls.key --ssl-certfile /certs/tls.crt
+   ```
+
+   > Or front the container with an HTTPS-terminating proxy and forward
+   > plain HTTP traffic to `http://app:8000`.
+
+**Example docker-compose snippet**
+
+```yaml
+services:
+  app:
+    build: .
+    ports:
+      - "8443:8443"
+    volumes:
+      - ./certs:/certs:ro
+    command: >-
+      uvicorn soc_agent.main:app --host 0.0.0.0 --port 8443 \
+        --ssl-keyfile /certs/tls.key --ssl-certfile /certs/tls.crt
+```
+
 ### Vendor Adapters (Wazuh & CrowdStrike)
 The service auto-detects and normalizes common vendor payloads to the internal `EventIn` schema before scoring.
 
