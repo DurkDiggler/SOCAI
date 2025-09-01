@@ -25,9 +25,6 @@ FastAPI webhook that ingests security events, enriches IOCs (OTX / VirusTotal / 
 4. **Verify the API**
    ```bash
    curl http://localhost:8000/healthz
-   ```
-   Optionally, check the readiness probe:
-   ```bash
    curl http://localhost:8000/readyz
    ```
 
