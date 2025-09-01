@@ -4,6 +4,7 @@ FROM python:3.12-slim AS builder
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 WORKDIR /build
 COPY pyproject.toml README.md /build/
+COPY src/ /build/src/
 RUN pip install --no-cache-dir -U pip setuptools wheel \
     && pip wheel --no-cache-dir --wheel-dir /wheels .
 
