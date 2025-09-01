@@ -1,0 +1,19 @@
+# Exclude VCS and build system files
+.git
+.gitignore
+
+# Python caches and build artifacts
+__pycache__/
+*.py[cod]
+*.so
+build/
+dist/
+*.egg-info/
+
+# Virtual environment directories
+.env
+.venv
+venv/
+
+# Test files
+/tests/
