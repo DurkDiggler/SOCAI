@@ -7,7 +7,12 @@ run:
 	docker compose up --build
 
 test:
-	PYTHONPATH=src pytest -q --cov soc_agent --cov-report=term-missing
+	@if [ "$(docker)" = "1" ]; then \
+		docker build --target dev -t soc-agent:dev . && \
+		docker run --rm -v $$(pwd):/app -w /app soc-agent:dev pytest -q --cov soc_agent --cov-report=term-missing; \
+	else \
+		PYTHONPATH=src pytest -q --cov soc_agent --cov-report=term-missing; \
+	fi
 
 fmt:
 	ruff check --fix && ruff format
