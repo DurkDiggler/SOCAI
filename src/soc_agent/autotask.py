@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 from typing import Any, Optional, Tuple
 
 import requests
@@ -28,7 +27,6 @@ def create_autotask_ticket(
 
     url = f"{SETTINGS.at_base_url.rstrip('/')}/tickets"
     headers = {
-        "Content-Type": "application/json",
         "ApiIntegrationCode": SETTINGS.at_api_integration_code,
         "UserName": SETTINGS.at_username,
         "Secret": SETTINGS.at_secret,
@@ -45,7 +43,7 @@ def create_autotask_ticket(
         r = requests.post(
             url,
             headers=headers,
-            data=json.dumps(payload),
+            json=payload,
             timeout=SETTINGS.http_timeout,
         )
         if r.status_code >= 400:
