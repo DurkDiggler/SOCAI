@@ -5,13 +5,18 @@ from typing import Any, Dict, List
 import requests
 
 from ..config import SETTINGS
-from ..logging import setup_json_logging
 from .providers import abuseipdb, otx, virustotal
 
 
 class IntelClient:
     def __init__(self):
-        setup_json_logging()  # idempotent
+        """Initialize the intelligence client.
+
+        Logging should be configured by the application using this client. To
+        avoid unintentionally overriding existing logging handlers, this
+        constructor does not configure logging and simply uses whatever
+        configuration is already in place.
+        """
         self.session = requests.Session()
 
     def enrich_ip(self, ip: str) -> Dict[str, Any]:
