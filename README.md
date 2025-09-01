@@ -31,9 +31,19 @@ FastAPI webhook that ingests security events, enriches IOCs (OTX / VirusTotal / 
    curl http://localhost:8000/readyz
    ```
 
-5. **Run tests inside the container (optional)**
+5. **Run tests (requires development dependencies)**
+
+   The runtime Docker image only includes production packages. To execute the
+   test suite you need a Python environment with the development dependencies
+   installed. This can be a dedicated development image or your local host.
+
+   On the host:
+
    ```bash
-   docker compose run --rm app pytest -q --cov soc_agent --cov-report=term-missing
+   pip install -r requirements.txt
+   PYTHONPATH=src pytest -q --cov soc_agent --cov-report=term-missing
+   # or
+   make test
    ```
 
 6. **Stop services**
